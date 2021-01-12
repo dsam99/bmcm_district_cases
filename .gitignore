@@ -1,2 +1,4 @@
 justfair_dataset.csv
 __pycache__/
+venv/
+local/
