@@ -25,32 +25,11 @@ def discrete_summed_mean_times(df,group,time_cols):
     return grouped['total_time'].mean()
 
 
-def judge_summed_mean_times(df,judge_col,time_cols):
-    """
-    Calculates the mean case time for each judge (as identified by judge_col)
-    using sum of time_cols (time_cols is a list of column names)
-    """
-    temp = df.dropna(subset = [judge_col])
-    temp['total_time'] = temp[time_cols].sum(axis=1)
-    grouped = temp.groupby(judge_col)
-    return grouped['total_time'].mean()
-
-
-def judge_mean_times(df,judge_col,time_col):
-    """
-    Calculates the mean case time for each judge (as identified by judge_col)
-    using just time_col
-    """
-    temp = df.dropna(subset = [judge_col])
-    grouped = temp.groupby(judge_col)
-    return grouped[time_col].mean()
-
-
 if __name__ == "__main__":
     df = pd.read_csv("justfair_dataset.csv")
-    summed_means = judge_summed_mean_times(df,"judge",['INT1','INT2','INT3'])
-    summed_means.plot.hist()
-    means = judge_mean_times(df,"judge","INT2") # we should decide on which columns specifically we want to use
+    summed_means = discrete_summed_mean_times(df,"judge",['INT1','INT2','INT3'])
+    summed_means.plot.hist(bins=20)
+    means = discrete_mean_times(df,"judge","INT2") # we should decide on which columns specifically we want to use
     means.plot.hist()
 
     plt.pyplot.show()
