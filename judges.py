@@ -7,7 +7,7 @@ import matplotlib as plt
 
 def discrete_mean_times(df,group,time_col):
     """
-    Computes conditional distribution over the group
+    Computes conditional distribution over the group using one time column
     """
     temp = df.dropna(subset = [group])
     grouped = temp.groupby(group)
@@ -16,8 +16,8 @@ def discrete_mean_times(df,group,time_col):
 
 def discrete_summed_mean_times(df,group,time_cols):
     """
-    Calculates the mean case time for each judge (as identified by judge_col)
-    using sum of time_cols (time_cols is a list of column names)
+    Computes conditional distribution over the group summing over all of the
+    columns in time_cols
     """
     temp = df.dropna(subset = [group])
     temp['total_time'] = temp[time_cols].sum(axis=1)
