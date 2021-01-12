@@ -2,15 +2,27 @@ import pandas as pd
 import matplotlib as plt
 
 # PRISTOT
-
+# DEFCONSL
+# FCOUNSEL
 
 def discrete_mean_times(df,group,time_col):
     """
+    Computes conditional distribution over the group
     """
     temp = df.dropna(subset = [group])
     grouped = temp.groupby(group)
     return grouped[time_col].mean()
-    # g FCOUNSEL
+
+
+def discrete_summed_mean_times(df,group,time_cols):
+    """
+    Calculates the mean case time for each judge (as identified by judge_col)
+    using sum of time_cols (time_cols is a list of column names)
+    """
+    temp = df.dropna(subset = [group])
+    temp['total_time'] = temp[time_cols].sum(axis=1)
+    grouped = temp.groupby(group)
+    return grouped['total_time'].mean()
 
 
 def judge_summed_mean_times(df,judge_col,time_cols):
