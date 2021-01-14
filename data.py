@@ -42,6 +42,29 @@ def compute_global(train_df, features):
 	
 	return global_dist
 
+def compute_judges(train_df, judges, features):
+	'''
+	Function to compute the estimate of judge distribution over features
+	'''
+
+	judge_counts = {}
+
+
+
+	for index, j in enumerate(judges):
+
+		if j not in judge_counts:
+			judge_counts[j] = {f:{} for f in features}
+		for i, f in enumerate(features):
+			val = train_df[f].values[index]
+			print(val)			
+			if val in judge_counts[j][f]:
+				judge_counts[j][f][val] += 1
+			else:
+				judge_counts[j][f][val] = 1
+
+	return judge_counts
+
 if __name__ == "__main__":
 
 	# read in dataframe
@@ -50,9 +73,20 @@ if __name__ == "__main__":
 
 	# extract district and specific features
 	district = 1
-	features = ["AGE"]
+	features = ["AGE", "judge"]
 	train_df, test_df = get_data(df, features, district)
+	
+	# extract judge names
+	judge_names_train = train_df["judge"]
+	judge_names_test = test_df["judge"]
+
+	# dropping judges
+	del train_df["judge"]
+	del test_df["judge"]
 
 	global_dist = compute_global(train_df, features)
 
-
+	# compute judge distribution
+	features.remove("judge")
+	judge_dist = compute_judges(train_df, judge_names_train, features)
+	print(judge_dist)
