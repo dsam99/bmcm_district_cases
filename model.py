@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import scipy.stats as ss
 from collections import defaultdict
+import random
 
 import metric
 
@@ -15,11 +16,13 @@ class Judge:
         self.name = name
         self.dist = {k: 0 for k in keys}
         self.features = feats
+        self.case_count = 0
 
     def add_case(self, case):
         '''
         Function to add a case to the queue and update distribution
         '''
+        self.case_count += 1
         for f in self.features:
             self.dist[case[f]] += 1
 
@@ -28,6 +31,7 @@ class Judge:
         removes the final case from self.cases and updates the local
         distribution accordingly
         """
+        self.case_count -= 1
         for f in self.features:
             self.dist[case[f]] -= 1
 
@@ -60,3 +64,14 @@ def process_case(subattributes, case, judges):
     # find the maximum decrease in the metric
     assign_idx = np.argmin(after_evals)
     judges[assign_idx].add_case(case)
+
+
+def assign_uniformly(case,judges):
+    random.choice(judges).add_case(case)
+
+
+def assign_by_name(case,judges):
+    for judge in judges:
+        if judge.name == case["judge"]:
+            judge.add_case(case)
+            break

@@ -1,4 +1,14 @@
 import numpy as np
+import scipy.stats as ss
+
+def uniformity_metric(subattributes, judge_dists):
+	chisquare_results = []
+	for s in subattributes:
+		observed = []
+		for name in judge_dists:
+			observed.append(judge_dists[name][s])
+		chisquare_results.append(ss.chisquare(observed)[1])
+	return min(chisquare_results),"blah"
 
 def tv_metric(subattributes, judge_dists):
 	'''
