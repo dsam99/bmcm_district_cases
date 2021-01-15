@@ -2,3 +2,5 @@ justfair_dataset.csv
 __pycache__/
 venv/
 local/
+RI.csv
+dist_68.csv
