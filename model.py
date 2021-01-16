@@ -43,7 +43,7 @@ class Case:
                      "crime": crime, "crim_hist": crim_hist, "counsel": counsel}
 
 
-def process_case(subattributes, case, judges):
+def process_case_tv(subattributes, case, judges):
     # send in case
     # each case has a filedate
     # use file_date to clear out judge queues
@@ -63,6 +63,21 @@ def process_case(subattributes, case, judges):
 
     # find the maximum decrease in the metric
     assign_idx = np.argmin(after_evals)
+    judges[assign_idx].add_case(case)
+
+def process_case_chi(subattributes, case, judges):
+    judge_dists = {j.name: j.dist for j in judges}
+    # evals, _ = metric.eval_metric(subattributes, judge_dists, kl=False)
+
+    #  compute metric after hypothetically adding the case
+    after_evals = []
+    for judge in judges:
+        judge.add_case(case)
+        after_evals.append(metric.uniformity_metric(subattributes, judge_dists)[0])
+        judge.remove_case(case)
+
+    # find the maximum decrease in the metric
+    assign_idx = np.argmax(after_evals)
     judges[assign_idx].add_case(case)
 
 

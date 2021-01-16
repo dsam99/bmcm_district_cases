@@ -1,14 +1,24 @@
 import numpy as np
 import scipy.stats as ss
 
+
 def uniformity_metric(subattributes, judge_dists):
+	# could modify if we have time to identify which subattribute is has the min
+	if len(judge_dists) == 1:
+		return 1,0
 	chisquare_results = []
 	for s in subattributes:
 		observed = []
 		for name in judge_dists:
 			observed.append(judge_dists[name][s])
-		chisquare_results.append(ss.chisquare(observed)[1])
-	return min(chisquare_results),"blah"
+		if all(v == 0 for v in observed):
+			chisquare_results.append(1)
+		else:
+			chisquare_results.append(ss.chisquare(observed)[1])
+		# print(observed)
+	# print(chisquare_results)
+	return min(chisquare_results), np.argmin(chisquare_results)
+
 
 def tv_metric(subattributes, judge_dists):
 	'''
@@ -33,7 +43,8 @@ def tv_metric(subattributes, judge_dists):
 
 		if total == 0:
 			# print(s)
-			q = np.zeros(n)
+			# q = np.zeros(n)
+			continue
 		else:
 			q /= total
 

@@ -19,7 +19,9 @@ def process_df(district_num, features, ageframe, crimframe, filename):
 					"CRIMPTS": "crim_hist", "FCOUNSEL": "counsel"},inplace=True) # rename columns
 
 	# save dataframe
-	df.to_csv(filename)
+	df.to_csv(filename) # keep this line for main.py, remove for main2.py
+	return df
+
 
 def get_data(df, features, district):
 	'''
